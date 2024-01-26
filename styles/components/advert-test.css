@@ -1,0 +1,8 @@
+.advert-slot { 
+  height: 250px;
+  width: 300px;
+  border: 2px solid hotpink;
+  margin: auto;
+  display: grid;
+  place-items: center;
+}

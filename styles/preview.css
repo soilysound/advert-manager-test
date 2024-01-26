@@ -1,0 +1,17 @@
+/*
+ *  This file is used for previewing locally using the toolbelt.
+ *  The actual entry point for your component styles are in
+ *  /styles/components/advert-test.css
+ *
+ *  To reference project-wide styles, sdc-project-base should
+ *  be added to the component npm devDependencies and imported:
+ *  @import "sdc-project-base/css/base/core/_start.scss";
+ *
+ *  Any other files referenced in here will not be imported
+ *  when the component is consumed by your app project.
+ */
+
+/* import any project base styles you neeed for previewing here */
+
+/* import the component-specific styles here */
+@import "components/advert-test.css"

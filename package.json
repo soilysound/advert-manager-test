@@ -1,0 +1,33 @@
+{
+  "name": "advert-test",
+  "version": "0.0.1",
+  "description": "A toolbelt component.",
+  "homepage": "https://github.com/sky-uk/advert-test",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:sky-uk/advert-test.git"
+  },
+  "license": "BSD-3-Clause",
+  "main": "src/components/advert-test.js",
+  "scripts": {
+    "preview": "toolbelt preview",
+    "test": "toolbelt test"
+  },
+  "devDependencies": {
+    "sdc-project-base-static": "14.3.0"
+  },
+  "stability": "experimental",
+  "toolbelt": {
+    "type": "handlebars",
+    "preview": "src/preview.js",
+    "index": "src/index.js",
+    "handlebars": {
+      "data": "sample/data.json",
+      "helpers": "src/helpers.js",
+      "template": "template.hbs"
+    },
+    "css": {
+      "main": "styles/components/advert-test.css"
+    }
+  }
+}
