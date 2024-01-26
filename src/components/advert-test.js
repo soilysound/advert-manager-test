@@ -8,6 +8,12 @@ export default function (rootElement) {
     slots: []
   }
 
+  const slotDefaults = {
+    prop1: 1,
+    prop2: 2,
+    prop3: 3
+  };
+
   function loadGPT(){
     console.log('load GPT');
     return new Promise((resolve, reject) => {
@@ -40,10 +46,16 @@ export default function (rootElement) {
   function init(){
     // get slots from page
     config.slots = Array.from(document.querySelectorAll('.advert-slot')).map((slot) => {
-      const data = JSON.parse(slot.dataset.config);
-      data.rootElement = slot;
-      data.slotType = slot.dataset.slotType;
-      return data;
+      const slotConfig = Object.assign({}, slotDefaults);
+
+      // Override default slot data with data from html
+      // NOTE - this prob needs to be a deep merge
+      Object.assign(slotConfig, JSON.parse(slot.dataset.config));
+  
+      slotConfig.rootElement = slot;
+      slotConfig.slotType = slot.dataset.slotType;
+
+      return slotConfig;
     });
 
     console.log(config);
