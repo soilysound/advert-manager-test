@@ -1,8 +1,3 @@
-/**
- * Initialises the component when passed an element
- *
- * @param {HTMLNode} rootElement The component dom node
- */
 export default function (rootElement) {
   if (!rootElement) {
     return;
@@ -13,7 +8,6 @@ export default function (rootElement) {
     slots: []
   }
 
-  // load GPT
   function loadGPT(){
     console.log('load GPT');
     return new Promise((resolve, reject) => {
@@ -47,7 +41,8 @@ export default function (rootElement) {
     // get slots from page
     config.slots = Array.from(document.querySelectorAll('.advert-slot')).map((slot) => {
       const data = JSON.parse(slot.dataset.config);
-      data.slot = slot;
+      data.rootElement = slot;
+      data.slotType = slot.dataset.slotType;
       return data;
     });
 
