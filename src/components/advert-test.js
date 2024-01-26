@@ -14,7 +14,7 @@ export default function (rootElement) {
     prop3: 3
   };
 
-  function loadGPT(){
+  function loadGPT() {
     console.log('load GPT');
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
@@ -24,7 +24,7 @@ export default function (rootElement) {
     });
   }
 
-  function getPeer39(){
+  function getPeer39() {
     console.log('load Peer39');
     return new Promise((resolve, reject) => {
       // check CMP, load peer39 and get data here
@@ -33,36 +33,45 @@ export default function (rootElement) {
     });
   }
 
-  function getCovatic(){
+  function getCovatic() {
     console.log('load Covatic');
     return new Promise((resolve, reject) => {
       // check CMP, load covatic and get data here
       config.props.push('whatever-from-covatic');
       resolve();
     });
-   
+
   }
 
-  function init(){
-    // get slots from page
-    config.slots = Array.from(document.querySelectorAll('.advert-slot')).map((slot) => {
-      const slotConfig = Object.assign({}, slotDefaults);
+  function initSlots() {
+    return new Promise((resolve, reject) => {
+      // get slots from page
+      config.slots = Array.from(document.querySelectorAll('.advert-slot')).map((slot) => {
+        const slotConfig = Object.assign({}, slotDefaults);
 
-      // Override default slot data with data from html
-      // NOTE - this prob needs to be a deep merge
-      Object.assign(slotConfig, JSON.parse(slot.dataset.config));
-  
-      slotConfig.rootElement = slot;
-      slotConfig.slotType = slot.dataset.slotType;
+        // Override default slot data with data from html
+        // NOTE - this prob needs to be a deep merge
+        Object.assign(slotConfig, JSON.parse(slot.dataset.config));
 
-      return slotConfig;
+        slotConfig.rootElement = slot;
+        slotConfig.slotType = slot.dataset.slotType;
+
+        return slotConfig;
+      });
+
+      resolve();
     });
 
-    console.log(config);
+  }
+
+  function renderAds() {
+    // call google render ads function here
+    console.log('render ads here', config);
   }
 
   loadGPT()
     .then(() => getCovatic())
     .then(() => getPeer39())
-    .then(() => init())
+    .then(() => initSlots())
+    .then(() => renderAds())
 }
