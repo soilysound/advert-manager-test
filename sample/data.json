@@ -2,5 +2,6 @@
   "advert-manager": true,
   "advert-slot": true,
   "slot-type": "MPU",
-  "slot-config": "{\"prop1\":\"data from html\"}"
+  "slot-config": "{\"prop1\":\"data from html\"}",
+  "id": "advert-1"
 }

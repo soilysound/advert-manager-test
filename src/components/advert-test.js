@@ -55,6 +55,7 @@ export default function (rootElement) {
 
         slotConfig.rootElement = slot;
         slotConfig.slotType = slot.dataset.slotType;
+        slotConfig.id = slot.id;
 
         return slotConfig;
       });
@@ -67,6 +68,16 @@ export default function (rootElement) {
   function renderAds() {
     // call google render ads function here
     console.log('render ads here', config);
+
+    config.slots.forEach((slot) => {
+      googletag.cmd.push(() => {
+        slot.rootElement.innerHTML = '';
+        googletag.pubads().enableSingleRequest();
+        googletag.defineSlot("/6355419/Travel/Europe/France/Paris", [300, 250], slot.id).addService(googletag.pubads());
+        googletag.display(slot.id);
+        googletag.enableServices();
+      });
+    });
   }
 
   loadGPT()
