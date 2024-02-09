@@ -1,4 +1,5 @@
 export default function (config) {
+    console.log('Execute renderAds()');
     // call google render ads function here
     config.slots.forEach((slot) => {
       const slotTag = slot.rootElement.getAttribute('data-tag');
