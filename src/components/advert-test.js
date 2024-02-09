@@ -1,8 +1,21 @@
+import overload from "../utils/overload";
+import renderAds from "../utils/renderAds";
+
 export default function (rootElement) {
   if (!rootElement) {
     return;
   }
 
+  if (rootElement.dataset.manager) {
+    initManager(rootElement);
+    return;
+  }
+
+  // Currently not used
+  initSlot(rootElement);
+}
+
+function initManager() {  
   const config = {
     props: [],
     slots: []
@@ -15,7 +28,6 @@ export default function (rootElement) {
   };
 
   function loadGPT() {
-    console.log('load GPT');
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.onload = resolve;
@@ -25,7 +37,6 @@ export default function (rootElement) {
   }
 
   function getPeer39() {
-    console.log('load Peer39');
     return new Promise((resolve, reject) => {
       // check CMP, load peer39 and get data here
       config.props.push('whatever-from-peer39');
@@ -34,13 +45,11 @@ export default function (rootElement) {
   }
 
   function getCovatic() {
-    console.log('load Covatic');
     return new Promise((resolve, reject) => {
       // check CMP, load covatic and get data here
       config.props.push('whatever-from-covatic');
       resolve();
     });
-
   }
 
   function initSlots() {
@@ -62,27 +71,51 @@ export default function (rootElement) {
 
       resolve();
     });
-
-  }
-
-  function renderAds() {
-    // call google render ads function here
-    console.log('render ads here', config);
-
-    config.slots.forEach((slot) => {
-      googletag.cmd.push(() => {
-        slot.rootElement.innerHTML = '';
-        googletag.pubads().enableSingleRequest();
-        googletag.defineSlot("/6355419/Travel/Europe/France/Paris", [300, 250], slot.id).addService(googletag.pubads());
-        googletag.display(slot.id);
-        googletag.enableServices();
-      });
-    });
   }
 
   loadGPT()
     .then(() => getCovatic())
     .then(() => getPeer39())
     .then(() => initSlots())
-    .then(() => renderAds())
+    .then(() => renderAds(config))
+    .then(() => overload(config))
 }
+
+function initSlot(rootElement) {
+  const slotDefaults = {
+    prop1: 1,
+    prop2: 2,
+    prop3: 3
+  };
+
+  if (!window.adSlots) {
+    window.adSlots = new Array();
+  }
+
+  const slotConfig = Object.assign({}, slotDefaults);
+
+  // Override default slot data with data from html
+  // NOTE - this prob needs to be a deep merge
+  Object.assign(slotConfig, JSON.parse(rootElement.dataset.config));
+
+  slotConfig.rootElement = rootElement;
+  slotConfig.slotType = rootElement.dataset.slotType;
+  slotConfig.id = 'advert-2';
+
+  window.adSlots.push(slotConfig)
+}
+
+function addDumbSlotAfterWait() {
+  let div = document.querySelector('.advert-slot').cloneNode();
+  div.classList.add('cloned')
+  document.querySelector('.page-wrapper').appendChild(div)
+  div.dataset.tag = '12345/cloned'
+
+  // Simulate initSlot execution, will be done in the component loader
+  initSlot(div);
+}
+
+// Simulate ad loading after manager is initialised
+setTimeout(() => {
+  addDumbSlotAfterWait()
+}, 5000);

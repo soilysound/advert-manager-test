@@ -1,7 +1,8 @@
 {
-  "advert-manager": true,
-  "advert-slot": true,
-  "slot-type": "MPU",
-  "slot-config": "{\"prop1\":\"data from html\"}",
-  "id": "advert-1"
-}
+    "advert-manager": true,
+    "advert-slot": true,
+    "slot-type": "MPU",
+    "slot-config": "{\"prop1\":\"data from html\"}",
+    "id": "advert-1"
+  }
+  

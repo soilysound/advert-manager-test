@@ -1,15 +1,14 @@
-{{#if advert-manager}}
+<div class="page-wrapper">
+    <h1>Page Example Usage</h1>
+
+    {{#if advert-manager}}
     {{!-- Include this only once, loads js and grabs all the slots off the page --}}
-    <div data-component-name="advert-test" data-vendor-name="advert-manager"></div>
-{{/if}}
+        <div data-component-name="advert-test" data-vendor-name="advert-manager" data-manager="true"></div>
+    {{/if}}
 
-{{#if advert-slot}}
-    {{!-- Include this for each slot on the page --}}
-    <div class="advert-slot" data-slot-type="{{slot-type}}" data-config="{{slot-config}}" id="advert-1">
-        HERE BE AN ADVERT 1
-    </div>
 
-    <div class="advert-slot" data-slot-type="{{slot-type}}" data-config="{{slot-config}}" id="advert-2">
-        HERE BE AN ADVERT 2
-    </div>
-{{/if}}
+    {{!-- Render Slots --}}
+    {{#if advert-slot}}
+        {{> ui-advert-slot advert-slot=true slot-type="MPU" slot-config="{\"prop1\":\"data from html\"}" id="advert-1" slot-tag="20346936/skysports/homepage" }}
+    {{/if}}
+</div>
