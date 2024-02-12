@@ -1,5 +1,4 @@
 import overload from "../utils/overload";
-import renderAds from "../utils/renderAds";
 
 export default function (rootElement) {
   if (!rootElement) {
@@ -11,7 +10,6 @@ export default function (rootElement) {
     return;
   }
 
-  // Currently not used
   initSlot(rootElement);
 }
 
@@ -28,8 +26,8 @@ function initManager() {
   };
 
   function loadGPT() {
+    console.log('load GPT');
     return new Promise((resolve, reject) => {
-      console.log('Load GPT');
       const script = document.createElement('script');
       script.onload = resolve;
       document.head.appendChild(script);
@@ -38,8 +36,8 @@ function initManager() {
   }
 
   function getPeer39() {
+    console.log('load Peer39');
     return new Promise((resolve, reject) => {
-      console.log('Load Peer39');
       // check CMP, load peer39 and get data here
       config.props.push('whatever-from-peer39');
       resolve();
@@ -47,8 +45,8 @@ function initManager() {
   }
 
   function getCovatic() {
+    console.log('load Covatic');
     return new Promise((resolve, reject) => {
-      console.log('Load Covatic');
       // check CMP, load covatic and get data here
       config.props.push('whatever-from-covatic');
       resolve();
@@ -62,7 +60,7 @@ function initManager() {
 }
 
 function initSlot(rootElement) {
-  console.log('Execute initSlot - simulate component calling init()')
+  console.log('Execute Slot code')
   const slotDefaults = {
     prop1: 1,
     prop2: 2,
@@ -86,17 +84,16 @@ function initSlot(rootElement) {
   window.adSlots.push(slotConfig)
 }
 
-window.addDumbSlotAfterWait = function() {
+// Simulates ad slot enetering the DOM after initial page load
+addSlotAfterWait = function() {
   let div = document.querySelector('.advert-slot').cloneNode();
   div.classList.add('cloned')
   document.querySelector('.page-wrapper').appendChild(div)
   div.dataset.tag = '12345/cloned'
 
-  // Simulate initSlot execution, will be done in the component loader
   initSlot(div);
 }
 
-// Simulate ad loading after manager is initialised
 setTimeout(() => {
-  window.addDumbSlotAfterWait()
+  addSlotAfterWait()
 }, 5000);

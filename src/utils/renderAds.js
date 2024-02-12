@@ -1,10 +1,8 @@
 export default function (config) {
-    console.log('Execute renderAds()');
-    // call google render ads function here
+    console.log('Execute renderAds');
     config.slots.forEach((slot) => {
       const slotTag = slot.rootElement.getAttribute('data-tag');
 
-      // Don't repush slot
       if (!slotTag) {
         return;
       }
