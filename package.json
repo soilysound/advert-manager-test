@@ -14,7 +14,7 @@
     "test": "toolbelt test"
   },
   "devDependencies": {
-    "sdc-project-base-static": "14.3.0"
+    "ui-project-base": "^16.0.0"
   },
   "stability": "experimental",
   "toolbelt": {
@@ -24,7 +24,8 @@
     "handlebars": {
       "data": "sample/data.json",
       "helpers": "src/helpers.js",
-      "template": "template.hbs"
+      "template": "template.hbs",
+      "partials": "src/partials.js"
     },
     "css": {
       "main": "styles/components/advert-test.css"

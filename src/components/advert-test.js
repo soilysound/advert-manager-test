@@ -1,8 +1,19 @@
+import overload from "../utils/overload";
+
 export default function (rootElement) {
   if (!rootElement) {
     return;
   }
 
+  if (rootElement.dataset.manager) {
+    initManager(rootElement);
+    return;
+  }
+
+  initSlot(rootElement);
+}
+
+function initManager() {  
   const config = {
     props: [],
     slots: []
@@ -40,49 +51,49 @@ export default function (rootElement) {
       config.props.push('whatever-from-covatic');
       resolve();
     });
-
-  }
-
-  function initSlots() {
-    return new Promise((resolve, reject) => {
-      // get slots from page
-      config.slots = Array.from(document.querySelectorAll('.advert-slot')).map((slot) => {
-        const slotConfig = Object.assign({}, slotDefaults);
-
-        // Override default slot data with data from html
-        // NOTE - this prob needs to be a deep merge
-        Object.assign(slotConfig, JSON.parse(slot.dataset.config));
-
-        slotConfig.rootElement = slot;
-        slotConfig.slotType = slot.dataset.slotType;
-        slotConfig.id = slot.id;
-
-        return slotConfig;
-      });
-
-      resolve();
-    });
-
-  }
-
-  function renderAds() {
-    // call google render ads function here
-    console.log('render ads here', config);
-
-    config.slots.forEach((slot) => {
-      googletag.cmd.push(() => {
-        slot.rootElement.innerHTML = '';
-        googletag.pubads().enableSingleRequest();
-        googletag.defineSlot("/6355419/Travel/Europe/France/Paris", [300, 250], slot.id).addService(googletag.pubads());
-        googletag.display(slot.id);
-        googletag.enableServices();
-      });
-    });
   }
 
   loadGPT()
     .then(() => getCovatic())
     .then(() => getPeer39())
-    .then(() => initSlots())
-    .then(() => renderAds())
+    .then(() => overload(config))
 }
+
+function initSlot(rootElement) {
+  console.log('Execute Slot code')
+  const slotDefaults = {
+    prop1: 1,
+    prop2: 2,
+    prop3: 3
+  };
+
+  if (!window.adSlots) {
+    window.adSlots = new Array();
+  }
+
+  const slotConfig = Object.assign({}, slotDefaults);
+
+  // Override default slot data with data from html
+  // NOTE - this prob needs to be a deep merge
+  Object.assign(slotConfig, JSON.parse(rootElement.dataset.config));
+
+  slotConfig.rootElement = rootElement;
+  slotConfig.slotType = rootElement.dataset.slotType;
+  slotConfig.id = 'advert-2';
+
+  window.adSlots.push(slotConfig)
+}
+
+// Simulates ad slot enetering the DOM after initial page load
+addSlotAfterWait = function() {
+  let div = document.querySelector('.advert-slot').cloneNode();
+  div.classList.add('cloned')
+  document.querySelector('.page-wrapper').appendChild(div)
+  div.dataset.tag = '12345/cloned'
+
+  initSlot(div);
+}
+
+setTimeout(() => {
+  addSlotAfterWait()
+}, 5000);
