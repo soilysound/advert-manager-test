@@ -4,14 +4,16 @@ export default function (rootElement) {
   }
 
   const config = {
-    props: [],
+    targeting: [],
     slots: []
   }
 
   const slotDefaults = {
-    slotTag: '',
-    slotType: 'mpu',
-    id: 'mpu-1'
+    tag: '',
+    sizes: JSON.stringify("[[300, 250]]"),
+    format: 'mpu',
+    id: 'mpu-1',
+    targeting: JSON.stringify({"platform": "test"})
   };
 
   function loadGPT() {
@@ -28,7 +30,7 @@ export default function (rootElement) {
     console.log('load Peer39');
     return new Promise((resolve, reject) => {
       // check CMP, load peer39 and get data here
-      config.props.p39_sky = 'whatever-from-peer39';
+      config.targeting.p39_sky = 'whatever-from-peer39';
       resolve();
     });
   }
@@ -37,7 +39,7 @@ export default function (rootElement) {
     console.log('load Covatic');
     return new Promise((resolve, reject) => {
       // check CMP, load covatic and get data here
-      config.props.covatic_sky = 'whatever-from-covatic';
+      config.targeting.covatic_sky = 'whatever-from-covatic';
       resolve();
     });
 
@@ -46,9 +48,11 @@ export default function (rootElement) {
   function globalSetUp() {
     console.log('global setup', config);
     return new Promise((resolve) => {
-      Object.entries(config.props).forEach(([key, value]) => {
+      Object.entries(config.targeting).forEach(([key, value]) => {
         googletag.cmd.push(() => {  
-          googletag.pubads().setTargeting(key, value) 
+          googletag.pubads().setTargeting(key, value);
+          googletag.pubads().enableSingleRequest();
+          googletag.enableServices();
         });
       });
 
@@ -60,8 +64,10 @@ export default function (rootElement) {
     console.log('create slot');
     // merge the slot dataset into the defaults
     const slotConfig = Object.assign(Object.assign({}, slotDefaults), slot.dataset);
-    
     slotConfig.rootElement = slot;
+    slotConfig.targeting = JSON.parse(slotConfig.targeting);
+    slotConfig.sizes = JSON.parse(slotConfig.sizes);
+
     config.slots.push(slotConfig);
   }
   
@@ -69,7 +75,7 @@ export default function (rootElement) {
     console.log('create slots');
     return new Promise((resolve, reject) => {
       // get slots from page
-      Array.from(document.querySelectorAll('.advert-slot')).forEach(slot => createSlot(slot));
+      Array.from(document.querySelectorAll('.advert')).forEach(slot => createSlot(slot));
       resolve();
     });
 
@@ -77,19 +83,23 @@ export default function (rootElement) {
 
   function renderAds() {
     console.log('render ads');
-    // loop through each slot and render
+    // loop through each slot and render (but ignore slots that have already being rendered)
     config.slots.filter((slot) => !slot.rendered).forEach((slot) => {
       slot.rendered = true;
       googletag.cmd.push(() => {
-        slot.rootElement.innerHTML = '';
-        googletag.pubads().enableSingleRequest();
-        googletag.defineSlot(
-          slot.slotTag, 
-          [[300, 250], [300, 600]], 
+        // create advert
+        const adSlot = googletag.defineSlot(
+          slot.tag, 
+          slot.sizes, 
           slot.id)
         .addService(googletag.pubads());
+
+        // set targeting
+        Object.entries(slot.targeting).forEach(([key, value]) => {
+          adSlot.setTargeting(key, value);
+        });
+          
         googletag.display(slot.id);
-        googletag.enableServices();
       });
     });
   }
@@ -103,11 +113,11 @@ export default function (rootElement) {
 
   // try adding an advert after load
   setTimeout(() => {
-    const lazySlot = document.querySelector('.advert-slot').cloneNode();
+    const lazySlot = document.querySelector('.advert').cloneNode();
     lazySlot.dataset.id = 'advert-3';
     lazySlot.id = 'advert-3';
     createSlot(lazySlot);
     document.body.appendChild(lazySlot);
     renderAds();
-  }, 3000)
+  }, 2000)
 }
