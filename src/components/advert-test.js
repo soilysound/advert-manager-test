@@ -9,9 +9,9 @@ export default function (rootElement) {
   }
 
   const slotDefaults = {
-    prop1: 1,
-    prop2: 2,
-    prop3: 3
+    slotTag: '',
+    slotType: 'mpu',
+    id: 'mpu-1'
   };
 
   function loadGPT() {
@@ -28,7 +28,7 @@ export default function (rootElement) {
     console.log('load Peer39');
     return new Promise((resolve, reject) => {
       // check CMP, load peer39 and get data here
-      config.props.push('whatever-from-peer39');
+      config.props.p39_sky = 'whatever-from-peer39';
       resolve();
     });
   }
@@ -37,43 +37,51 @@ export default function (rootElement) {
     console.log('load Covatic');
     return new Promise((resolve, reject) => {
       // check CMP, load covatic and get data here
-      config.props.push('whatever-from-covatic');
+      config.props.covatic_sky = 'whatever-from-covatic';
       resolve();
     });
 
   }
 
-  function initSlots() {
-    return new Promise((resolve, reject) => {
-      // get slots from page
-      config.slots = Array.from(document.querySelectorAll('.advert-slot')).map((slot) => {
-        const slotConfig = Object.assign({}, slotDefaults);
-
-        // Override default slot data with data from html
-        // NOTE - this prob needs to be a deep merge
-        Object.assign(slotConfig, JSON.parse(slot.dataset.config));
-
-        slotConfig.rootElement = slot;
-        slotConfig.slotType = slot.dataset.slotType;
-        slotConfig.id = slot.id;
-
-        return slotConfig;
+  function globalSetUp() {
+    console.log('global setup', config);
+    return new Promise((resolve) => {
+      Object.entries(config.props).forEach(([key, value]) => {
+        googletag.cmd.push(() => {  googletag.pubads().setTargeting(key, value) });
       });
 
+      resolve();
+    })
+  }
+
+  function createSlot(slot) {
+    console.log('create slot');
+    // merge the slot dataset into the defaults
+    const slotConfig = Object.assign(Object.assign({}, slotDefaults), slot.dataset);
+    
+    slotConfig.rootElement = slot;
+    config.slots.push(slotConfig);
+  }
+  
+  function createSlots() {
+    console.log('create slots');
+    return new Promise((resolve, reject) => {
+      // get slots from page
+      Array.from(document.querySelectorAll('.advert-slot')).forEach(slot => createSlot(slot));
       resolve();
     });
 
   }
 
   function renderAds() {
-    // call google render ads function here
-    console.log('render ads here', config);
-
-    config.slots.forEach((slot) => {
+    console.log('render ads');
+    // loop through each slot and render
+    config.slots.filter((slot) => !slot.rendered).forEach((slot) => {
+      slot.rendered = true;
       googletag.cmd.push(() => {
         slot.rootElement.innerHTML = '';
         googletag.pubads().enableSingleRequest();
-        googletag.defineSlot("/6355419/Travel/Europe/France/Paris", [300, 250], slot.id).addService(googletag.pubads());
+        googletag.defineSlot(slot.slotTag, [300, 250], slot.id).addService(googletag.pubads());
         googletag.display(slot.id);
         googletag.enableServices();
       });
@@ -83,6 +91,17 @@ export default function (rootElement) {
   loadGPT()
     .then(() => getCovatic())
     .then(() => getPeer39())
-    .then(() => initSlots())
-    .then(() => renderAds())
+    .then(() => globalSetUp())
+    .then(() => createSlots())
+    .then(() => renderAds());
+
+  // try adding an advert after load
+  setTimeout(() => {
+    const lazySlot = document.querySelector('.advert-slot').cloneNode();
+    lazySlot.dataset.id = 'advert-3';
+    lazySlot.id = 'advert-3';
+    createSlot(lazySlot);
+    document.body.appendChild(lazySlot);
+    renderAds();
+  }, 3000)
 }
