@@ -47,7 +47,9 @@ export default function (rootElement) {
     console.log('global setup', config);
     return new Promise((resolve) => {
       Object.entries(config.props).forEach(([key, value]) => {
-        googletag.cmd.push(() => {  googletag.pubads().setTargeting(key, value) });
+        googletag.cmd.push(() => {  
+          googletag.pubads().setTargeting(key, value) 
+        });
       });
 
       resolve();
@@ -81,7 +83,11 @@ export default function (rootElement) {
       googletag.cmd.push(() => {
         slot.rootElement.innerHTML = '';
         googletag.pubads().enableSingleRequest();
-        googletag.defineSlot(slot.slotTag, [300, 250], slot.id).addService(googletag.pubads());
+        googletag.defineSlot(
+          slot.slotTag, 
+          [[300, 250], [300, 600]], 
+          slot.id)
+        .addService(googletag.pubads());
         googletag.display(slot.id);
         googletag.enableServices();
       });

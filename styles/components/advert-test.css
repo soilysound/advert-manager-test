@@ -1,5 +1,5 @@
 .advert-slot { 
-  height: 250px;
+  min-height: 250px;
   width: 300px;
   border: 2px solid hotpink;
   margin: auto;
