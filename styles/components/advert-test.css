@@ -3,7 +3,7 @@
   --height: 250px;
   border: 2px solid hotpink;
   margin: 20px auto;
-  display: inline-grid;
+  display: grid;
   place-items: center;
   position: relative;
   min-width: var(--width);
