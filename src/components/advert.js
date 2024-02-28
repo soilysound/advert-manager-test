@@ -13,7 +13,7 @@ export default function (rootElement) {
 
   const config = {
     targeting: {},
-    slots: []
+    slots: [],
   }
 
   const slotDefaults = {
