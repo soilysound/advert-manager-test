@@ -1,9 +1,9 @@
 /* global require, document */
-import AdvertTest from './components/advert-test';
+import Advert from './components/advert';
 
 require('../styles/preview.css');
 
 const components = document.querySelectorAll('[data-component-name=advert-test]');
 for (let i = 0; i < components.length; i++) {
-  AdvertTest(components[i]);
+  Advert(components[i]);
 }

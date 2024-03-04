@@ -1,7 +1,9 @@
 {
   "advert-manager": true,
   "advert-slot": true,
-  "slot-type": "MPU",
-  "slot-config": "{\"prop1\":\"data from html\"}",
+  "format": "leaderboard",
+  "sizes": "[[728, 90], [900, 250]]",
+  "tag": "/6355419/Travel/Europe/France/Paris",
+  "targeting": "{\"platform\":\"live\",\"advert-targeting\":\"'platform': 'live'\",\"position\":\"homepagetopslot\"}",
   "id": "advert-1"
 }

@@ -1,8 +1,23 @@
-.advert-slot { 
-  height: 250px;
-  width: 300px;
+.advert { 
+  --width: 300px;
+  --height: 250px;
   border: 2px solid hotpink;
-  margin: auto;
+  margin: 20px auto;
   display: grid;
   place-items: center;
+  position: relative;
+  min-width: var(--width);
+  min-height: var(--height);
+}
+
+.advert[data-format="leaderboard"] {
+  --width: 728px;
+  --height: 90px;
+}
+
+.advert:before {
+  content: attr(data-id);
+  background: hotpink;
+  bottom: 100%;
+  position: absolute;
 }

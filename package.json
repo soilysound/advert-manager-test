@@ -23,6 +23,7 @@
     "index": "src/index.js",
     "handlebars": {
       "data": "sample/data.json",
+      "multiple": "sample/multiple.json",
       "helpers": "src/helpers.js",
       "template": "template.hbs"
     },
