@@ -1,11 +1,11 @@
 {{#if advert-manager}}
     {{!-- Include this only once, loads js and grabs all the slots off the page --}}
-    <div data-component-name="advert-test" data-vendor-name="advert-manager"></div>
+    <div class="ui-advert-manager" data-component-name="advert-manager" data-vendor-name="advert-manager"></div>
 {{/if}}
 
 {{#if advert-slot}}
     {{!-- Include this for each slot on the page --}}
-    <div class="advert" data-tag="{{tag}}" data-format="{{format}}" id="{{id}}" data-id="{{id}}" data-targeting="{{targeting}}" data-sizes="{{sizes}}">
+    <div class="ui-advert" data-tag="{{tag}}" data-format="{{format}}" id="{{id}}" data-id="{{id}}" data-targeting="{{targeting}}" data-sizes="{{sizes}}">
         
     </div>
 {{/if}}

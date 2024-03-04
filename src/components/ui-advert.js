@@ -34,7 +34,7 @@ export default function (rootElement) {
 
   // try adding an advert after load
   setTimeout(() => {
-    const lazySlot = document.querySelector('.advert').cloneNode();
+    const lazySlot = document.querySelector('.ui-advert').cloneNode();
     lazySlot.dataset.id = 'advert-3';
     lazySlot.id = 'advert-3';
     config.slots.push(createSlot(lazySlot, slotDefaults));
