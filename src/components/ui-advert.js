@@ -31,13 +31,6 @@ export default function (rootElement) {
     .then(() => createSlots(config, slotDefaults))
     .then(() => renderAds(config));
 
-
-  const observer = new MutationObserver((mutations) => { 
-    mutations.forEach((mutation) => {
-      console.log(mutation);
-    });
-  });
-
   // try adding an advert after load
   // use a css animation event or mutation observer to grab new adverts added after load
   setTimeout(() => {
