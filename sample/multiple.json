@@ -5,7 +5,7 @@
   {
     "advert-slot": true,
     "format": "leaderboard",
-    "sizes": "[[728, 90], [900, 250]]",
+    "size":"{\"mobile\":[[300,250],[300,600]],\"tablet\":[[728,90]],\"desktop\":[[728,90],[970,250]]}",
     "tag": "/6355419/Travel/Europe/France/Paris",
     "targeting": "{\"platform\":\"live\",\"advert-targeting\":\"'platform': 'live'\",\"position\":\"homepagetopslot\"}",
     "id": "advert-1",
@@ -14,7 +14,7 @@
   {
     "advert-slot": true,
     "format": "mpu",
-    "sizes": "[[300, 250], [300, 600]]",
+    "size":"{\"mobile\":[[300,250],[300,600]],\"tablet\":[[300,250],[300,600]],\"desktop\":[[300,250],[300,600]]}",
     "tag": "/6355419/Travel/Europe/France/Paris",
     "targeting": "{\"platform\":\"live\",\"advert-targeting\":\"'platform': 'live'\",\"position\":\"homepagetopslot\"}",
     "id": "advert-2",

@@ -2,9 +2,8 @@ import { loadGPT } from "./load-gpt";
 import { getCovatic } from "./get-covatic";
 import { getPeer39 } from "./get-peer-39";
 import { globalSetUp } from "./global-setup";
-import { createSlot } from "./create-slot";
 import { createSlots } from "./create-slots";
-import { renderAds } from "./render-ads";
+import { renderAds, renderAdsAfterLoad, renderAdsOnViewPortChange } from "./render-ads";
 
 export default function (rootElement) {
   if (!rootElement) {
@@ -12,13 +11,21 @@ export default function (rootElement) {
   }
 
   const config = {
+    rootElement,
     targeting: {},
     slots: [],
+    responsiveSlots: [],
+    breakpoints: {
+      "mobile": { w: 320, mq: "(min-width: 0px) and (max-width: 740px)" },
+      "tablet": { w: 740, mq: "(min-width: 740px) and (max-width: 1000px)" },
+      "desktop": { w: 1000, mq: "(min-width: 1000px)" },
+      "default": { w: 0 }
+    }
   }
 
   const slotDefaults = {
     tag: '',
-    sizes: JSON.stringify("[[300, 250]]"),
+    size: JSON.stringify("{\"mobile\":[[300,250],[300,600]]}"),
     format: 'mpu',
     id: 'mpu-1',
     targeting: JSON.stringify({ "platform": "test" })
@@ -29,16 +36,7 @@ export default function (rootElement) {
     .then(() => getPeer39(config))
     .then(() => globalSetUp(config))
     .then(() => createSlots(config, slotDefaults))
-    .then(() => renderAds(config));
-
-  // try adding an advert after load
-  // use a css animation event or mutation observer to grab new adverts added after load
-  setTimeout(() => {
-    const lazySlot = document.querySelector('.ui-advert').cloneNode();
-    lazySlot.dataset.id = 'advert-3';
-    lazySlot.id = 'advert-3';
-    config.slots.push(createSlot(lazySlot, slotDefaults));
-    document.body.appendChild(lazySlot);
-    renderAds(config);
-  }, 2000)
+    .then(() => renderAds(config))
+    .then(() => renderAdsOnViewPortChange(config, slotDefaults))
+    .then(() => renderAdsAfterLoad(config, slotDefaults));
 }
