@@ -1,11 +1,16 @@
 .ui-advert { 
   --width: 300px;
   --height: 250px;
+  --bg: none;
+  --padding: 0;
   border: 2px solid hotpink;
-  margin: 20px auto;
   display: grid;
+  box-sizing: content-box;
   place-items: center;
+  align-content: space-between;
   position: relative;
+  background: var(--bg);
+  padding: var(--padding);
   min-width: var(--width);
   min-height: var(--height);
 }
@@ -15,9 +20,13 @@
   --height: 90px;
 }
 
-.ui-advert:before {
-  content: attr(data-id);
-  background: hotpink;
-  bottom: 100%;
-  position: absolute;
+.ui-advert[data-label="true"]:before {
+  content: "Advert";
+  font-size: 14px;
+  padding: 1em 0;
+}
+
+.ui-advert[data-type~="shaded"] {
+  --bg: #eee;
+  --padding: 1em 0;
 }

@@ -32,7 +32,14 @@ export default function (rootElement) {
     .then(() => renderAds(config));
 
 
+  const observer = new MutationObserver((mutations) => { 
+    mutations.forEach((mutation) => {
+      console.log(mutation);
+    });
+  });
+
   // try adding an advert after load
+  // use a css animation event or mutation observer to grab new adverts added after load
   setTimeout(() => {
     const lazySlot = document.querySelector('.ui-advert').cloneNode();
     lazySlot.dataset.id = 'advert-3';
